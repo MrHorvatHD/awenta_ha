@@ -1,6 +1,6 @@
 DOMAIN = "awenta_ahr"
 
-PLATFORMS = ["fan", "sensor", "select"]
+PLATFORMS = ["fan", "sensor", "select", "button"]
 
 API_URL = "https://ahr.awenta.pl/api.php"
 WS_URL = "wss://ahr.awenta.pl:31990/"

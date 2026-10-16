@@ -3,6 +3,7 @@ import websockets
 import hashlib
 import json
 import urllib.parse
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.util.ssl import get_default_context
 
@@ -164,10 +165,14 @@ class AwentaAPI:
         ws = self.ws.get(mac)
 
         if not ws:
-            return
+            # Fail loudly: a silently dropped command (e.g. a display press) would leave callers out of sync.
+            raise HomeAssistantError(f"Awenta unit {mac} is not connected to the cloud")
 
         payload["id"] = self.id_socket
         payload["key"] = self.key_socket
         payload["mac"] = mac
 
-        await ws.send(json.dumps(payload))
+        try:
+            await ws.send(json.dumps(payload))
+        except Exception as err:
+            raise HomeAssistantError(f"Awenta unit {mac}: sending failed: {err}") from err

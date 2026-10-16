@@ -1,7 +1,15 @@
+import math
+
 from homeassistant.components.fan import FanEntity, FanEntityFeature
+from homeassistant.util.percentage import (
+    percentage_to_ranged_value,
+    ranged_value_to_percentage,
+)
 
 from .entity import AwentaEntity
 from .const import DOMAIN
+
+SPEED_RANGE = (1, 3)
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
@@ -30,26 +38,44 @@ class AwentaFan(AwentaEntity, FanEntity):
 
         self._attr_name = name
         self._attr_unique_id = f"{mac}_fan"
-        self._attr_supported_features = FanEntityFeature.SET_SPEED
+        self._attr_supported_features = (
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.TURN_ON
+            | FanEntityFeature.TURN_OFF
+        )
         self._attr_speed_count = 3
+
+    @property
+    def _data(self):
+
+        return self.coordinator.data.get(self.mac, {})
 
     @property
     def is_on(self):
 
-        data = self.coordinator.data.get(self.mac, {})
-        return data.get("recuperation_gear_adv", 0) > 0
+        return bool(self._data.get("power", False))
 
     @property
     def percentage(self):
 
-        gear = self.coordinator.data.get(self.mac, {}).get(
-            "recuperation_gear_adv", 0
-        )
+        gear = self._data.get("recuperation_gear_adv", 0)
 
-        if gear == 0:
+        if not self.is_on or not gear:
             return 0
 
-        return int(gear / 3 * 100)
+        return ranged_value_to_percentage(SPEED_RANGE, gear)
+
+    async def _send_gear(self, percentage):
+
+        gear = math.ceil(percentage_to_ranged_value(SPEED_RANGE, percentage))
+
+        await self.api.send(
+            self.mac,
+            {
+                "act": "send_gear_number",
+                "gear_nr": max(1, min(3, gear)),
+            },
+        )
 
     async def async_set_percentage(self, percentage):
 
@@ -57,22 +83,22 @@ class AwentaFan(AwentaEntity, FanEntity):
             await self.async_turn_off()
             return
 
-        gear = max(1, min(3, round(percentage / 33)))
+        if not self.is_on:
+            await self.api.send(self.mac, {"act": "send_power_on"})
 
-        await self.api.send(
-            self.mac,
-            {
-                "act": "send_gear_number",
-                "gear_nr": gear,
-            },
-        )
+        await self._send_gear(percentage)
+
+    async def async_turn_on(self, percentage=None, preset_mode=None, **kwargs):
+
+        if percentage == 0:
+            await self.async_turn_off()
+            return
+
+        await self.api.send(self.mac, {"act": "send_power_on"})
+
+        if percentage is not None:
+            await self._send_gear(percentage)
 
     async def async_turn_off(self, **kwargs):
 
-        await self.api.send(
-            self.mac,
-            {
-                "act": "send_gear_number",
-                "gear_nr": 0,
-            },
-        )
+        await self.api.send(self.mac, {"act": "send_power_off"})
