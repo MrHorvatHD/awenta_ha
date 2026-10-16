@@ -3,7 +3,8 @@ import websockets
 import hashlib
 import json
 import urllib.parse
-import aiohttp
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.util.ssl import get_default_context
 
 from .const import API_URL, WS_URL
 
@@ -74,13 +75,13 @@ class AwentaAPI:
 
         data = {"data": json.dumps(payload)}
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                API_URL,
-                data=urllib.parse.urlencode(data),
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
-            ) as resp:
-                result = await resp.text()
+        session = async_get_clientsession(self.hass)
+        async with session.post(
+            API_URL,
+            data=urllib.parse.urlencode(data),
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        ) as resp:
+            result = await resp.text()
 
         j = json.loads(result)
         if not isinstance(j.get("params"), dict) or "id" not in j["params"]:
@@ -103,13 +104,13 @@ class AwentaAPI:
 
         data = {"data": json.dumps(payload)}
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                API_URL,
-                data=urllib.parse.urlencode(data),
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
-            ) as resp:
-                result = await resp.text()
+        session = async_get_clientsession(self.hass)
+        async with session.post(
+            API_URL,
+            data=urllib.parse.urlencode(data),
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        ) as resp:
+            result = await resp.text()
 
         j = json.loads(result)
         if not isinstance(j.get("params"), list):
@@ -125,6 +126,7 @@ class AwentaAPI:
 
                 ws = await websockets.connect(
                     WS_URL,
+                    ssl=get_default_context(),
                     additional_headers={"source": "android"},
                 )
 

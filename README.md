@@ -1,10 +1,13 @@
 # Awenta HRV Home Assistant Integration
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MateiiK&repository=awenta_ha&category=Integration)
-[![GitHub Release](https://img.shields.io/github/v/release/MateiiK/awenta_ha?label=release&style=flat-square)](https://github.com/MateiiK/awenta_ha/releases)
-[![License](https://img.shields.io/github/license/MateiiK/awenta_ha?style=flat-square)](https://github.com/MateiiK/awenta_ha/blob/main/LICENSE)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MrHorvatHD&repository=awenta_ha&category=Integration)
+[![GitHub Release](https://img.shields.io/github/v/release/MrHorvatHD/awenta_ha?label=release&style=flat-square)](https://github.com/MrHorvatHD/awenta_ha/releases)
+[![License](https://img.shields.io/github/license/MrHorvatHD/awenta_ha?style=flat-square)](https://github.com/MrHorvatHD/awenta_ha/blob/master/LICENSE)
 
 ---
+
+> Maintained fork of [MateiiK/awenta_ha](https://github.com/MateiiK/awenta_ha) (original by MateiK, MIT) — the upstream
+> project is inactive. Fixes: config flow domain, HACS install, retry/cleanup, non-blocking SSL.
 
 ## Overview
 
@@ -22,14 +25,14 @@ This integration adds support for **Awenta HRV (Heat Recovery Ventilation) units
 ### HACS (Recommended)
 
 1. Open Home Assistant → HACS → Integrations → ⋮ → Custom Repositories  
-2. Repository URL: `https://github.com/MateiiK/awenta_ha`  
+2. Repository URL: `https://github.com/MrHorvatHD/awenta_ha`  
 3. Category: **Integration**  
 4. Install and restart Home Assistant  
 5. Add the integration via **Settings → Devices & Services → Add Integration → Awenta HRV**
 
 ### Manual Install
 
-1. Download the repository ZIP: [Download ZIP](https://github.com/MateiiK/awenta_ha/archive/refs/heads/main.zip)  
+1. Download the repository ZIP: [Download ZIP](https://github.com/MrHorvatHD/awenta_ha/archive/refs/heads/master.zip)  
 2. Extract and copy the folder to:
 /config/custom_components/awenta_ahr
 3. Restart Home Assistant  
@@ -55,5 +58,5 @@ If you like this integration, you can support development:
 
 ## License
 
-MIT License — see [LICENSE](https://github.com/MateiiK/awenta_ha/blob/main/LICENSE)
+MIT License — see [LICENSE](https://github.com/MrHorvatHD/awenta_ha/blob/master/LICENSE)
 
