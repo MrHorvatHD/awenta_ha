@@ -31,7 +31,7 @@ This integration adds support for **Awenta HRV (Heat Recovery Ventilation) units
 
 1. Download the repository ZIP: [Download ZIP](https://github.com/MateiiK/awenta_ha/archive/refs/heads/main.zip)  
 2. Extract and copy the folder to:
-/config/custom_components/awenta
+/config/custom_components/awenta_ahr
 3. Restart Home Assistant  
 4. Add the integration via **Settings → Devices & Services → Add Integration → Awenta HRV**
 

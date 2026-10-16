@@ -1,5 +1,7 @@
 import logging
 
+from homeassistant.exceptions import ConfigEntryNotReady
+
 from .const import DOMAIN, PLATFORMS
 from .awenta_api import AwentaAPI
 from .coordinator import AwentaCoordinator
@@ -16,7 +18,11 @@ async def async_setup_entry(hass, entry):
 
     api = AwentaAPI(hass, email, password)
 
-    await api.start()
+    try:
+        await api.start()
+    except Exception as err:  # cloud unreachable, wrong login or unexpected answer → HA retries later
+        await api.stop()
+        raise ConfigEntryNotReady(f"Awenta cloud not available: {err}") from err
 
     coordinator = AwentaCoordinator(hass, api)
 
@@ -37,6 +43,7 @@ async def async_unload_entry(hass, entry):
     )
 
     if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
+        data = hass.data[DOMAIN].pop(entry.entry_id)
+        await data["api"].stop()
 
     return unload_ok

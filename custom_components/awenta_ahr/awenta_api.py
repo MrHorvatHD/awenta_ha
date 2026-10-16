@@ -23,6 +23,7 @@ class AwentaAPI:
         self.devices = []
         self.listeners = []
         self.ws = {}
+        self._tasks = []
 
     def register_listener(self, callback):
         self.listeners.append(callback)
@@ -33,9 +34,29 @@ class AwentaAPI:
         await self.list_devices()
 
         for device in self.devices:
-            self.hass.async_create_task(
-                self.websocket_loop(device["mac"])
+            self._tasks.append(
+                self.hass.async_create_background_task(
+                    self.websocket_loop(device["mac"]),
+                    f"awenta_ahr websocket {device['mac']}",
+                )
             )
+
+    async def stop(self):
+        """Stop the websocket loops and close their connections (unload / reload)."""
+        for task in self._tasks:
+            task.cancel()
+        for task in self._tasks:
+            try:
+                await task
+            except (asyncio.CancelledError, Exception):
+                pass
+        self._tasks.clear()
+        for ws in list(self.ws.values()):
+            try:
+                await ws.close()
+            except Exception:
+                pass
+        self.ws.clear()
 
     async def login(self):
 
@@ -62,6 +83,8 @@ class AwentaAPI:
                 result = await resp.text()
 
         j = json.loads(result)
+        if not isinstance(j.get("params"), dict) or "id" not in j["params"]:
+            raise RuntimeError(f"unexpected login answer from the Awenta cloud: {result[:200]}")
 
         self.id_socket = j["params"]["id"]
         self.key_socket = j["params"]["key"]
@@ -89,6 +112,8 @@ class AwentaAPI:
                 result = await resp.text()
 
         j = json.loads(result)
+        if not isinstance(j.get("params"), list):
+            raise RuntimeError(f"unexpected device list from the Awenta cloud: {result[:200]}")
 
         self.devices = j["params"]
 
@@ -124,6 +149,12 @@ class AwentaAPI:
 
             except Exception:
 
+                ws = self.ws.pop(mac, None)
+                if ws is not None:
+                    try:
+                        await ws.close()
+                    except Exception:
+                        pass
                 await asyncio.sleep(5)
 
     async def send(self, mac, payload):

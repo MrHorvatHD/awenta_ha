@@ -1,4 +1,4 @@
-DOMAIN = "awenta"
+DOMAIN = "awenta_ahr"
 
 PLATFORMS = ["fan", "sensor", "select"]
 
