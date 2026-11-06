@@ -1,4 +1,8 @@
-from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.const import UnitOfTemperature, UnitOfTime, PERCENTAGE
 
 from .entity import AwentaEntity
@@ -40,6 +44,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
 class AwentaTemperatureSensor(AwentaEntity, SensorEntity):
 
+    # a measurement state class makes Home Assistant keep long-term (hourly) statistics, not just 10 days of history
+    _attr_device_class = SensorDeviceClass.TEMPERATURE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
     def __init__(self, coordinator, api, mac, name):
 
         super().__init__(coordinator, api, mac, name)
@@ -60,6 +68,9 @@ class AwentaTemperatureSensor(AwentaEntity, SensorEntity):
 
 
 class AwentaHumiditySensor(AwentaEntity, SensorEntity):
+
+    _attr_device_class = SensorDeviceClass.HUMIDITY
+    _attr_state_class = SensorStateClass.MEASUREMENT
 
     def __init__(self, coordinator, api, mac, name):
 

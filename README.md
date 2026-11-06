@@ -79,7 +79,7 @@ Awenta's cloud. It is the fallback if local mode does not fit.
 | `select.<unit>_hygrostat` | humidity threshold *Off / 10 % … 90 %*: above it the unit runs at the highest gear, below it it idles (gear 0). Replaces an active timer. Only settable while the unit is running |
 | `select.<unit>_timer` | run for *5 / 10 / 15 / 30 / 45 / 60 / 120 / 180 min*, then the unit switches itself off; *Off* cancels it. Replaces an active hygrostat. Only settable while the unit is running |
 | `sensor.<unit>_timer_left` | minutes left on the timer (0 when none is running) |
-| `sensor.<unit>_temperature`, `sensor.<unit>_humidity` | room sensor |
+| `sensor.<unit>_temperature`, `sensor.<unit>_humidity` | room sensor; recorded as measurements, so Home Assistant keeps **long-term hourly statistics** for them (not only the 10 days of detailed history) |
 | `sensor.<unit>_filter_hours_left` | hours until the filter must be replaced (2160 after a reset) |
 | `button.<unit>_display` | one DISP press: dimmed → humidity → temperature → clock → automatic → dimmed … The unit does not report which screen it shows, so to reach a given screen from an automation keep track of the position yourself (e.g. an `input_select`) |
 | `button.<unit>_filter_reset` | filter hours back to 2160 after a filter change. Only works **while the unit is running** (the unit ignores it otherwise, the official app hides the option) — pressing it while the unit is off fails with an explanation |
