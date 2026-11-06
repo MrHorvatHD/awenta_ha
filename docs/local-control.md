@@ -96,4 +96,4 @@ the units. The cloud mode and the DNS record exclude each other.
 
 - The official Awenta app (it talks to the cloud, which no longer sees the units).
 - Firmware updates from Awenta and the master/slave *synchro* command (`set_synchro_*`, `set_update`).
-- Hygrostat, timer and night-mode settings work on the protocol level (see protocol.md) but are not exposed as entities yet.
+- Night mode (on/off, start/end time) works on the protocol level (see protocol.md) but is not exposed as entities yet. Hygrostat and timer are available as selects since 2.1.

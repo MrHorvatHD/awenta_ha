@@ -31,6 +31,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
             AwentaFilterSensor(coordinator, api, mac, name)
         )
 
+        entities.append(
+            AwentaTimerLeftSensor(coordinator, api, mac, name)
+        )
+
     async_add_entities(entities)
 
 
@@ -96,3 +100,25 @@ class AwentaFilterSensor(AwentaEntity, SensorEntity):
         data = self.coordinator.data.get(self.mac, {})
 
         return data.get("time_filter_time_left")
+
+
+class AwentaTimerLeftSensor(AwentaEntity, SensorEntity):
+    """Minutes left on the timer (0 when no timer is running)."""
+
+    _attr_icon = "mdi:timer-sand"
+    _attr_native_unit_of_measurement = UnitOfTime.MINUTES
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, coordinator, api, mac, name):
+
+        super().__init__(coordinator, api, mac, name)
+
+        self._attr_name = f"{name} Timer left"
+        self._attr_unique_id = f"{mac}_timer_left"
+
+    @property
+    def native_value(self):
+
+        data = self.coordinator.data.get(self.mac, {})
+
+        return data.get("timer_left")

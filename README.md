@@ -16,6 +16,7 @@ This integration adds support for **Awenta HRV (Heat Recovery Ventilation) units
 
 - Power on/off and fan speed (gear 1–3) · work mode (Recuperation / Supply / Extract)
 - Temperature, humidity and filter hours left sensors
+- Hygrostat (humidity threshold) and timer (run for 5–180 min, then off) selects with a minutes-left sensor
 - Display button (one press of the unit's DISP button) and a filter reset button
 - **Local mode (new in 2.0, recommended):** the units connect to Home Assistant instead of Awenta's cloud. Works without
   internet, without the Awenta app and without an account; commands take effect immediately.
@@ -75,6 +76,9 @@ Awenta's cloud. It is the fallback if local mode does not fit.
 |---|---|
 | `fan.<unit>` | power, fan speed Low / Medium / High (gear 1–3). In hygrostat mode the unit overrides the gear (3 when humid, 0 = idle when dry) |
 | `select.<unit>_mode` | Recuperation / Supply / Extract |
+| `select.<unit>_hygrostat` | humidity threshold *Off / 10 % … 90 %*: above it the unit runs at the highest gear, below it it idles (gear 0). Replaces an active timer. Only settable while the unit is running |
+| `select.<unit>_timer` | run for *5 / 10 / 15 / 30 / 45 / 60 / 120 / 180 min*, then the unit switches itself off; *Off* cancels it. Replaces an active hygrostat. Only settable while the unit is running |
+| `sensor.<unit>_timer_left` | minutes left on the timer (0 when none is running) |
 | `sensor.<unit>_temperature`, `sensor.<unit>_humidity` | room sensor |
 | `sensor.<unit>_filter_hours_left` | hours until the filter must be replaced (2160 after a reset) |
 | `button.<unit>_display` | one DISP press: dimmed → humidity → temperature → clock → automatic → dimmed … The unit does not report which screen it shows, so to reach a given screen from an automation keep track of the position yourself (e.g. an `input_select`) |
