@@ -1,5 +1,5 @@
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.const import UnitOfTemperature, PERCENTAGE
+from homeassistant.components.sensor import SensorEntity, SensorStateClass
+from homeassistant.const import UnitOfTemperature, UnitOfTime, PERCENTAGE
 
 from .entity import AwentaEntity
 from .const import DOMAIN
@@ -25,6 +25,10 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
         entities.append(
             AwentaHumiditySensor(coordinator, api, mac, name)
+        )
+
+        entities.append(
+            AwentaFilterSensor(coordinator, api, mac, name)
         )
 
     async_add_entities(entities)
@@ -70,3 +74,25 @@ class AwentaHumiditySensor(AwentaEntity, SensorEntity):
             return data.get("humidity_sensor", 0) / 10
 
         return None
+
+
+class AwentaFilterSensor(AwentaEntity, SensorEntity):
+    """Hours left until the filter must be replaced (2160 after a reset)."""
+
+    _attr_icon = "mdi:air-filter"
+    _attr_native_unit_of_measurement = UnitOfTime.HOURS
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, coordinator, api, mac, name):
+
+        super().__init__(coordinator, api, mac, name)
+
+        self._attr_name = f"{name} Filter hours left"
+        self._attr_unique_id = f"{mac}_filter_hours_left"
+
+    @property
+    def native_value(self):
+
+        data = self.coordinator.data.get(self.mac, {})
+
+        return data.get("time_filter_time_left")

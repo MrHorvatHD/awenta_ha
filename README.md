@@ -16,7 +16,9 @@ This integration adds support for **Awenta HRV (Heat Recovery Ventilation) units
 
 - Power on/off and fan speed control (Low / Medium / High)
 - Display button: one press of the unit's DISP button (see below)
-- Temperature, Humidity, and Filter sensors
+- Temperature, Humidity, and Filter hours left sensors
+- Filter reset button (`button.<unit>_filter_reset`): sets the filter counter back to 2160 h after a filter change. Only works
+  while the unit is running — pressing it while the unit is off fails with an explanation (the unit ignores the command then)
 - Mode selection (Recuperation / Supply / Extract)
 - Automatic updates via HACS
 
@@ -66,7 +68,7 @@ WebSocket `wss://ahr.awenta.pl:31990/`, JSON messages, each with `id`, `key` (fr
 | `send_timer_level` | `level` 0–8 | timer |
 | `set_night_on` / `set_night_off`, `set_time_night_on` / `set_time_night_off` | time fields | night mode |
 | `set_display` | — | one DISP press |
-| `set_filter_reset` | — | reset the filter counter |
+| `set_filter_reset` | — | filter counter back to 2160 h; the unit ignores it while switched off (the app hides the option then) |
 | `set_synchro_on` / `set_synchro_off` | — | master/slave sync |
 
 ---
