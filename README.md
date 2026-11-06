@@ -53,6 +53,8 @@ power-cycle the units. Entity ids and unique ids stay the same, so dashboards an
 remembered from the cloud while the entry still runs in cloud mode (upgrade first, let it start once, then switch). To go back,
 choose *cloud* again and delete the DNS record.
 
+**Cloud mode and the DNS record exclude each other:** while `ahr.awenta.pl` points at Home Assistant, the integration's own cloud mode resolves the name to itself and cannot reach Awenta either. To go back to the cloud, switch the mode *and* delete the record. The unit names are not remembered when the first start already happens in local mode — the units then show up as *Awenta XXXX* until you rename them under **Configure**.
+
 **What local mode cannot do:** the official Awenta app stops working while the DNS record is in place (it talks to the cloud
 about units that are connected to Home Assistant instead); firmware updates from Awenta and the master/slave *synchro* command
 are not available. The protocol also allows hygrostat, timer and night-mode settings — they are decoded (see
