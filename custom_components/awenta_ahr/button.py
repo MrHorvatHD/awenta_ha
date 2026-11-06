@@ -29,8 +29,9 @@ async def async_setup_entry(hass, entry, async_add_entities):
 class AwentaDisplayButton(AwentaEntity, ButtonEntity):
     """One press of the unit's DISP button.
 
-    The unit cycles its display on every press (dimmed → humidity → temperature → clock → automatic → dimmed …)
-    and does not report which screen is shown, so callers have to track the position themselves.
+    The unit cycles its display on every press
+    (dimmed → humidity → temperature → clock → automatic → dimmed …) and does not report which screen is shown,
+    so callers have to track the position themselves.
     """
 
     _attr_icon = "mdi:monitor"
@@ -51,9 +52,9 @@ class AwentaDisplayButton(AwentaEntity, ButtonEntity):
 class AwentaFilterResetButton(AwentaEntity, ButtonEntity):
     """Reset the filter-hours counter to its full value (2160 h) after a filter change.
 
-    The unit ignores the reset command while it is switched off (the official app hides the option then), so pressing
-    the button while the unit is off fails with an explanation instead of silently doing nothing. The button itself stays
-    available so a dashboard can show the hours left and explain why a reset is not possible right now.
+    The unit ignores the reset command while it is switched off (the official app hides the option then), so
+    pressing the button while the unit is off fails with an explanation instead of silently doing nothing. The
+    button itself stays available so a dashboard can show the hours left and explain why a reset is not possible.
     """
 
     _attr_icon = "mdi:air-filter"

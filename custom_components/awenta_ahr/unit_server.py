@@ -1,8 +1,11 @@
-"""Local server the Awenta units connect to instead of wss://ahr.awenta.pl:31990/ (pure asyncio, no Home Assistant imports).
+"""Local server the Awenta units connect to instead of wss://ahr.awenta.pl:31990/.
 
-The units are websocket *clients*: they open a TLS connection to the cloud's address, upgrade to a websocket and then send
-binary frames (state reports every ~5 s) while the server pings them. They do not check the server's certificate, so a
-self-signed certificate is enough once the name `ahr.awenta.pl` resolves to the machine running this server.
+Pure asyncio, no Home Assistant imports.
+
+The units are websocket *clients*: they open a TLS connection to the cloud's address, upgrade to a websocket and
+then send binary frames (state reports every ~5 s) while the server pings them. They do not check the server's
+certificate, so a self-signed certificate is enough once the name `ahr.awenta.pl` resolves to the machine running
+this server.
 """
 import asyncio
 import base64

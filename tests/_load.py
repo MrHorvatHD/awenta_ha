@@ -1,4 +1,7 @@
-"""Load the integration's pure modules by file path (the integration folder has a select.py that would shadow the stdlib)."""
+"""Load the integration's pure modules by file path.
+
+The integration folder has a select.py that would shadow the stdlib module of the same name.
+"""
 import importlib.util
 import os
 import sys

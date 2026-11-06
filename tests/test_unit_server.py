@@ -28,8 +28,10 @@ def make_cert(directory):
     if _CTX is not None:
         return _CTX
     cert, key = os.path.join(directory, "c.pem"), os.path.join(directory, "k.pem")
-    subprocess.run(["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "2", "-subj", "/CN=ahr.awenta.pl",
-                    "-keyout", key, "-out", cert], check=True, capture_output=True)
+    subprocess.run(
+        ["openssl", "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-days", "2", "-subj", "/CN=ahr.awenta.pl",
+         "-keyout", key, "-out", cert],
+        check=True, capture_output=True)
     ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ctx.minimum_version = ssl.TLSVersion.TLSv1_2
     ctx.load_cert_chain(cert, key)
@@ -60,7 +62,10 @@ class FakeUnit:
     async def send(self, opcode, payload=b""):
         mask = os.urandom(4)
         n = len(payload)
-        head = bytes([0x80 | opcode, 0x80 | n]) if n < 126 else bytes([0x80 | opcode, 0x80 | 126]) + n.to_bytes(2, "big")
+        if n < 126:
+            head = bytes([0x80 | opcode, 0x80 | n])
+        else:
+            head = bytes([0x80 | opcode, 0x80 | 126]) + n.to_bytes(2, "big")
         self.writer.write(head + mask + bytes(b ^ mask[i % 4] for i, b in enumerate(payload)))
         await self.writer.drain()
 

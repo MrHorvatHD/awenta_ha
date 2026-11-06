@@ -45,8 +45,12 @@ validate the server certificate, so all it takes is to make that name point at y
    named *Awenta XXXX* (the last bytes of its MAC); rename them under **Configure** (Settings → Devices & services → Awenta HRV →
    Configure) — the names are used for entities created afterwards, existing entities can be renamed in the usual way.
 
-When Home Assistant is not running the units keep working with their own settings; they reconnect when it is back (give them a
-minute). The entities of a unit that is not connected show as *unavailable*.
+When Home Assistant is not running the units keep working with their own settings; they normally reconnect when it is back (give
+them a minute). **If a unit does not come back after Home Assistant was down, power-cycle it** (switch it off and on at the unit)
+so that it reconnects. The entities of a unit that is not connected show as *unavailable*.
+
+The full explanation, router examples (UniFi, AdGuard, Pi-hole, dnsmasq), troubleshooting and security notes are in
+[docs/local-control.md](docs/local-control.md).
 
 **Switching an existing cloud setup to local:** open **Configure** on the existing entry, choose mode *local*, do steps 1–2 and
 power-cycle the units. Entity ids and unique ids stay the same, so dashboards and automations keep working. The unit names are

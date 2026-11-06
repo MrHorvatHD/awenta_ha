@@ -1,7 +1,10 @@
-"""Awenta AHR unit protocol: scrambled binary frames inside the unit's websocket (pure Python, no Home Assistant imports).
+"""Awenta AHR unit protocol: scrambled binary frames inside the unit's websocket.
 
-Frame = payload + XOR checksum of the payload, every byte XORed with TABLE[(index + rnd) & 255], rnd (random byte) appended.
-Server -> unit commands use ENC, unit -> server reports use DEC (same as the BLE/TCP pairing protocol of the official app).
+Pure Python, no Home Assistant imports.
+
+Frame = payload + XOR checksum of the payload, every byte XORed with TABLE[(index + rnd) & 255], rnd (a random
+byte) appended. Server -> unit commands use ENC, unit -> server reports use DEC (same as the BLE/TCP pairing
+protocol of the official app).
 The protocol was reverse-engineered from the official app and captured traffic; see docs/protocol.md.
 """
 import os
