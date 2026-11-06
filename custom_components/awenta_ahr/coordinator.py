@@ -20,6 +20,7 @@ class AwentaCoordinator(DataUpdateCoordinator):
         self.data = {}
 
         self.api.register_listener(self._handle_update)
+        self.api.register_status_listener(self.async_update_listeners)
 
     def _handle_update(self, mac, data):
 

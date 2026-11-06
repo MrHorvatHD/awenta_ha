@@ -24,11 +24,19 @@ class AwentaAPI:
 
         self.devices = []
         self.listeners = []
+        self.status_listeners = []
         self.ws = {}
         self._tasks = []
 
     def register_listener(self, callback):
         self.listeners.append(callback)
+
+    def register_status_listener(self, callback):
+        self.status_listeners.append(callback)
+
+    def online(self, mac):
+        """The cloud keeps entities available as before; only the local mode reports per-unit presence."""
+        return True
 
     async def start(self):
 

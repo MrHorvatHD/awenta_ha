@@ -15,6 +15,11 @@ class AwentaEntity(CoordinatorEntity):
         self.device_name = name
 
     @property
+    def available(self):
+
+        return super().available and self.api.online(self.mac)
+
+    @property
     def device_info(self):
 
         return DeviceInfo(

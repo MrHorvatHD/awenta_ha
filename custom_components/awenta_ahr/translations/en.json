@@ -1,0 +1,46 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Awenta HRV",
+        "description": "Local mode: the units connect to Home Assistant (needs the DNS record described in the README). Cloud mode: control through Awenta's cloud with your Awenta account.",
+        "menu_options": {
+          "local": "Local (units connect to Home Assistant)",
+          "cloud": "Awenta cloud (account)"
+        }
+      },
+      "local": {
+        "title": "Local mode",
+        "description": "Home Assistant listens for the units on this port. Point ahr.awenta.pl at this Home Assistant (see the README) and power-cycle each unit once.",
+        "data": {
+          "port": "Port"
+        }
+      },
+      "cloud": {
+        "title": "Awenta cloud",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This connection is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Awenta HRV connection",
+        "description": "Switching mode reloads the integration. Local mode needs ahr.awenta.pl to point at this Home Assistant. Unit names are used for entity names of newly created entities.",
+        "data": {
+          "mode": "Mode",
+          "port": "Local port"
+        }
+      }
+    },
+    "error": {
+      "cloud_needs_account": "This entry was created in local mode and has no Awenta account; add a cloud entry instead."
+    }
+  }
+}
